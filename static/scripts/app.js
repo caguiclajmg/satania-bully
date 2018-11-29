@@ -48,7 +48,7 @@ function actionUp(position) {
         currentAnimation = 'slap-left';
         currentFrame = 0;
         audioSlap.play();
-    } else if(velocity.x > 0.5 && velocity.y < -0.5) {
+    } else if(velocity.x > 0.5 && velocity.y < -0.5 && currentAnimation != 'slap-right') {
         currentAnimation = 'slap-right';
         currentFrame = 0;
         audioSlap.play();
