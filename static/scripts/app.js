@@ -2,6 +2,7 @@ var image = document.getElementById('img-main');
 var music = document.getElementById('audio-music');
 var audioSlap = document.getElementById('audio-slap');
 
+var run = false;
 var animations = {};
 var currentAnimation = 'idle';
 var currentFrame = 0;
@@ -28,6 +29,7 @@ function loadAnimationSets() {
 }
 
 function tick() {
+    if(!run) return;
     if(music.paused) music.play();
 
     if(currentFrame < animations[currentAnimation].length - 1) currentFrame++;
@@ -44,11 +46,11 @@ function actionUp(position) {
     var positionDelta = Point(position.x - swipeStartPosition.x, position.y - swipeStartPosition.y);
     var velocity = Point(positionDelta.x / timeDelta, positionDelta.y / timeDelta);
 
-    if(velocity.x < -0.5 && velocity.y > 0.5 && currentAnimation != 'slap-left') {
+    if(velocity.x < -0.5 && velocity.y > 0.5 && currentAnimation !== 'slap-left') {
         currentAnimation = 'slap-left';
         currentFrame = 0;
         audioSlap.play();
-    } else if(velocity.x > 0.5 && velocity.y < -0.5 && currentAnimation != 'slap-right') {
+    } else if(velocity.x > 0.5 && velocity.y < -0.5 && currentAnimation !== 'slap-right') {
         currentAnimation = 'slap-right';
         currentFrame = 0;
         audioSlap.play();
@@ -73,6 +75,7 @@ loadAnimationSets();
 image.src = animations[currentAnimation][currentFrame].src;
 image.addEventListener('dragstart', function(e) { e.preventDefault(); });
 image.addEventListener('contextmenu', absorbEvent);
+image.addEventListener('click', function(e) { if(!run) run = true; });
 image.addEventListener('touchstart', function(e) { actionDown(Point(e.changedTouches[0].pageX, e.changedTouches[0].pageY)); });
 image.addEventListener('touchend', function(e) { actionUp(Point(e.changedTouches[0].pageX, e.changedTouches[0].pageY)); });
 image.addEventListener('mousedown', function(e) { actionDown(Point(e.offsetX, e.offsetY)); });
